@@ -1,0 +1,16 @@
+filter <- function(threshold,zeros,countData){
+        #1,threshold is the critical mean value of each row;
+        #2,countdata is the input original countdata that is going to filter;
+        #3,zeros is the critical number of zero reads that each row contained that would filtered out,
+        #every row that contain more than this number of zero reads will be deleted. 
+        Means <- rowMeans(countData, na.rm = FALSE)
+        fullcountdata <- cbind(countData,Means)
+        filcountdata <- subset(fullcountdata,Means>threshold)
+        filcountdata$Means <- NULL
+        #delete the rows that have zero reads less than "zeros" number.
+        filcountdata<-filcountdata[rowSums(filcountdata==0)<=zeros,]
+        #save the filtered data into the csv file called filcountdata.csv
+        write.csv(filcountdata,file="filcountdata.csv")
+        filcountdata
+        
+}
